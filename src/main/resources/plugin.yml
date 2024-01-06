@@ -1,0 +1,5 @@
+main: com.mclotus8esports.survival.LotusSurvival
+name: ${name}
+version: ${version}
+api-version: 1.20
+author: Firestar311
