@@ -4,24 +4,32 @@ import com.mclotus8esports.survival.Items;
 import com.mclotus8esports.survival.LotusSurvival;
 import com.mclotus8esports.survival.items.SoulGem;
 import com.stardevllc.starmclib.color.ColorUtils;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
+import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.*;
 
 public class EntityListener implements Listener {
     private LotusSurvival plugin;
+    private Material witherHeartType;
     
     private static final Random random = new Random();
 
     public EntityListener(LotusSurvival plugin) {
         this.plugin = plugin;
+        this.witherHeartType = Items.witherHeart.toItemStack().getType();
     }
     
     @EventHandler
@@ -44,7 +52,9 @@ public class EntityListener implements Listener {
 
                 soulGem.setSouls(soulGem.getSouls() + souls);
                 killer.getInventory().setItem(soulGem.getSlot(), soulGem.toItemStack());
-                ColorUtils.coloredMessage(killer, "&7&oʏᴏᴜ ɴᴏᴡ ʜᴀᴠᴇ &7&n%{caughtsouls.%uuid of attacker%}% sᴏᴜʟs");
+                ColorUtils.coloredMessage(killer, "&fʏᴏᴜʀ ɢᴇᴍ ɪs ʙᴇɪɴɢ ғɪʟʟᴇᴅ ᴡɪᴛʜ &5sᴏᴜʟs&f...");
+            } else {
+                ColorUtils.coloredMessage(killer, "&fʏᴏᴜ &cғᴀɪʟᴇᴅ&f ᴛᴏ ɢᴀɪɴ sᴏᴜʟs ғʀᴏᴍ ᴀ &7&n" + entity.getType().name().toLowerCase().replaceAll("_", " "));   
             }
         }
         
@@ -65,6 +75,24 @@ public class EntityListener implements Listener {
                 world.spawnParticle(Particle.SOUL, entity.getLocation(), 100, 0, 1, 0, 0.04);
                 //TODO Unlock warden recipes
                 //ColorUtils.coloredMessage(killer, "&7You have unlocked new recipes for Warden Armor and Tools");
+            }
+        }
+    }
+    
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Player player)) {
+            return;
+        }
+        
+        if (!Set.of(FIRE, FIRE_TICK, LAVA, WITHER).contains(e.getCause())) {
+            return;
+        }
+
+        for (ItemStack itemStack : player.getInventory().getContents()) {
+            if (itemStack.getType() == witherHeartType) {
+                e.setCancelled(true);
+                return;
             }
         }
     }
