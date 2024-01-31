@@ -1,0 +1,453 @@
+on load:
+   # Warden Armor Crafting Recipes
+    register new shapeless recipe for {WardenIngot} using netherite ingot and nether star with id "wardenitems:warden_ingot" in group "warden_items"
+    register new shapeless recipe for {WardenPrimedIngot} using {WardenIngot} and {SoulGem} with id "wardenitems:primed_warden_ingot" in group "warden_items"
+    register new shaped recipe for {WardenArmors::helmet} using {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, air, {WardenPrimedIngot}, air, air, and air with id "wardenarmors:helmet" in group "warden_armors"
+    register new shaped recipe for {WardenArmors::chestplate} using {WardenPrimedIngot}, air, {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, and {WardenPrimedIngot} with id "wardenarmors:chestplate" in group "warden_armors"
+    register new shaped recipe for {WardenArmors::leggings} using {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, air, {WardenPrimedIngot}, {WardenPrimedIngot}, air, and {WardenPrimedIngot} with id "wardenarmors:leggings" in group "warden_armors"
+    register new shaped recipe for {WardenArmors::boots} using air, air, air, {WardenPrimedIngot}, air, {WardenPrimedIngot}, {WardenPrimedIngot}, air, and {WardenPrimedIngot} with id "wardenarmors:boots" in group "warden_armors"
+    register new shaped recipe for {WardenTools::sword} using air, {WardenPrimedIngot}, air, air, {WardenPrimedIngot}, air, air, blaze rod, and air with id "wardentools:sword" in group "warden_tools"
+    register new shaped recipe for {WardenTools::pickaxe} using {WardenPrimedIngot}, {WardenPrimedIngot}, {WardenPrimedIngot}, air, blaze rod, air, air, blaze rod, and air with id "wardentools:pickaxe" in group "warden_tools"
+    register new shaped recipe for {WardenTools::axe} using {WardenPrimedIngot}, {WardenPrimedIngot}, air, {WardenPrimedIngot}, blaze rod, air, air, blaze rod, and air with id "wardentools:axe" in group "warden_tools"
+    register new shaped recipe for {WardenTools::hoe} using {WardenPrimedIngot}, {WardenPrimedIngot}, air, air, blaze rod, air, air, blaze rod, and air with id "wardentools:hoe" in group "warden_tools"
+    register new shaped recipe for {WardenTools::spade} using air, {WardenPrimedIngot}, air, air, blaze rod, air, air, blaze rod, and air with id "wardentools:spade" in group "warden_tools"
+
+# These variables are used to set the function of the powers and allows the player or function to run correctly.
+variables:
+    {wardenlearned.%player%} = false
+    {gloweffect.%player%} = false
+    {sonicattack.%player%} = false
+
+# This command is for the admin or whoever has permission to clear or set the recipe status of a targeted player.
+command wardenrecipe [<text>] [<player>]:
+    permission: wardenrecipe.clear
+    trigger:
+        set {_player} to arg-2
+        if arg-1 is set:
+            if arg-1 is "clear":
+                if arg-2 is set:
+                    if arg-2 is a player:
+                        console command "minecraft:recipe take %{_player}% wardenarmors:helmet"
+                        console command "minecraft:recipe take %{_player}% wardenarmors:chestplate"
+                        console command "minecraft:recipe take %{_player}% wardenarmors:leggings"
+                        console command "minecraft:recipe take %{_player}% wardenarmors:boots"
+                        console command "minecraft:recipe take %{_player}% wardentools:sword"
+                        console command "minecraft:recipe take %{_player}% wardentools:pickaxe"
+                        console command "minecraft:recipe take %{_player}% wardentools:axe"
+                        console command "minecraft:recipe take %{_player}% wardentools:spade"
+                        console command "minecraft:recipe take %{_player}% wardentools:hoe"
+                        console command "minecraft:recipe take %{_player}% wardenitems:warden_ingot"
+                        console command "minecraft:recipe take %{_player}% wardenitems:primed_warden_ingot"
+                        set {wardenlearned.%{_player}%} to false
+                        send "{@prefix} &fReset &7&n%{_player}%'s&f learned status of the &5Warden Items" to player
+                    else:
+                        send "{@prefix} &cThis has to be a player" to player
+                else:
+                    send "{@prefix} &cPlease choose a player to reset" to player
+            if arg-1 is "unlock":
+                if arg-2 is set:
+                    if arg-2 is a player:
+                        console command "minecraft:recipe give %{_player}% wardenarmors:helmet"
+                        console command "minecraft:recipe give %{_player}% wardenarmors:chestplate"
+                        console command "minecraft:recipe give %{_player}% wardenarmors:leggings"
+                        console command "minecraft:recipe give %{_player}% wardenarmors:boots"
+                        console command "minecraft:recipe give %{_player}% wardentools:sword"
+                        console command "minecraft:recipe give %{_player}% wardentools:pickaxe"
+                        console command "minecraft:recipe give %{_player}% wardentools:axe"
+                        console command "minecraft:recipe give %{_player}% wardentools:spade"
+                        console command "minecraft:recipe give %{_player}% wardentools:hoe"
+                        console command "minecraft:recipe give %{_player}% wardenitems:warden_ingot"
+                        console command "minecraft:recipe give %{_player}% wardenitems:primed_warden_ingot"
+                        send "{@prefix} &fUnlocked &7&n%{_player}%'s&f learned status of the &5Warden Items" to player
+                    else:
+                        send "{@prefix} &cThis has to be a player" to player
+                else:
+                    send "{@prefix} &cPlease choose a player to reset" to player
+        if arg-1 is not set:
+            send "&r          {@prefix}" to player
+            send "" to player
+            send "&7&oPlease make a selection" to player
+            send "&7Do &5/wardenrecipe <clear/unlock> <player>" to player
+
+                
+# Death Events
+
+on death:
+    set {_victim} to victim
+    if attacker is a player:
+        if attacker has {NamedSoulGem}:
+            if victim is a player:
+                if:
+                    victim has {NamedSoulGem}
+                    attacker has {NamedSoulGem}
+                then:
+                    add {caughtsouls.%uuid of victim%} to {caughtsouls.%uuid of attacker%}
+                    set {caughtsouls.%uuid of victim%} to 0
+                    SoulGemSet(attacker)
+                    remove {NamedSoulGem} from attacker
+                    add 1 of {SoulGem} to attacker
+# Pick up and drop events for the soul gem.
+on pick up:
+    if event-item is {NamedSoulGem}:
+        delete event-dropped item
+        cancel event
+        SoulGemSet(player)
+        wait 3 ticks
+        add 1 of {SoulGem} to inventory of player
+        stop
+
+on drop:
+    if event-item is {NamedSoulGem}:
+        cancel event
+        stop
+
+# Main Commands for the souls gems
+command addsoulgem [<number>] [<player>]:
+    permission: soulgem.add
+    trigger:
+        set {_number} to arg-1
+        set {_player} to arg-2
+        if arg-1 is set:
+            if arg-2 is set:
+                if arg-2 is a player:
+                    send "{@prefix} &fGiven &7&n%{_number}%&5 soul gem &fto &7&n%{_player}%." to player
+                    SoulGemSet({_player})
+                    add 1 of {SoulGem} to the player's inventory
+                else:
+                    if arg-2 is not a player:
+                        send "{@prefix} &7This command is not allow to give other entities soul gems." to player
+            else:
+                send "{@prefix} &fGiven yourself &7&n%{_number}%&5 soul gem(s)" to player
+                SoulGemSet(player)
+                add 1 of {SoulGem} to the player's inventory
+
+command warden [<text>]:
+    permission: lotus.armors.give
+    trigger:
+        if arg-1 is not set:
+            send "&r          {@prefix}" to player
+            send "&dPlease choose an option." to player
+            send "" to player
+            send "&5&n&lOptions" to player
+            send "&8- &dHelmet" to player
+            send "&8- &dChestplate" to player
+            send "&8- &dLeggings" to player
+            send "&8- &dBoots" to player
+            send "&8- &dSword" to player
+            send "&8- &dPickaxe" to player
+            send "&8- &dAxe" to player
+            send "&8- &dSpade" to player
+            send "&8- &dSet" to player
+            send "" to player
+            send "&dDo &7/warden <option>&d to get that item" to player
+            
+        if arg-1 is set:
+            if arg-1 is "helmet":
+                add 1 of {WardenArmors::helmet} to the player's inventory
+            if arg-1 is "chestplate":
+                add 1 of {WardenArmors::chestplate} to the player's inventory
+            if arg-1 is "leggings":
+                add 1 of {WardenArmors::leggings} to the player's inventory
+            if arg-1 is "boots":
+                add 1 of {WardenArmors::boots} to the player's inventory
+            if arg-1 is "sword":
+                add 1 of {WardenTools::sword} to the player's inventory
+            if arg-1 is "pickaxe":
+                add 1 of {WardenTools::pickaxe} to the player's inventory
+            if arg-1 is "axe":
+                add 1 of {WardenTools::axe} to the player's inventory
+            if arg-1 is "spade":
+                add 1 of {WardenTools::spade} to the player's inventory
+            if arg-1 is "set":
+                loop {WardenArmors::*}:
+                    add 1 of loop-value to inventory of player
+                loop {WardenTools::*}:
+                    add 1 of loop-value to inventory of player
+
+
+
+
+# Warden Armor Powers
+
+    # Helmet Ability
+every 5 seconds:
+    loop all players:
+        if loop-player has potion effect darkness:
+            remove darkness from the loop-player
+        if loop-player is wearing {WardenArmors::helmet}:
+            if light level at the loop-player is less than 5:
+                apply infinite night vision 1 without particles to loop-player
+            else:
+                remove night vision from the loop-player
+        else:
+            stop
+    # Chestplate Abilities
+on armor change:
+    if new armor item is {WardenArmors::chestplate}:
+        apply infinite strength 3 without particles to player
+    if old armor item is {WardenArmors::chestplate}:
+        remove strength from player
+
+    # Boots Ability
+on armor change:
+    if new armor item is {WardenArmors::boots}:
+        apply infinite speed 3 without particles to player
+    if old armor item is {WardenArmors::boots}:
+        remove speed from player
+    # Leggings Ability
+on player move:
+    if player is wearing {WardenArmors::leggings}:
+        if block at player is soul sand:
+            if {soulstep.%player%} is true:
+                stop
+            else:
+                set {soulstep.%player%} to true
+                set walk speed of player to 10
+                stop
+                
+        else:
+            if {soulstep.%player%} is false:
+                stop
+            else:
+                set {soulstep.%player%} to false
+                set walk speed of player to 0.2
+    else:
+        if {soulstep.%player%} is false:
+            stop
+        else:
+            set {soulstep.%player%} to false
+            set walk speed of player to 0.2
+
+
+    # Full Set Abilities
+on potion effect added:
+    set {_player} to player
+    if event-potioneffecttype = darkness:
+        if {_player} is wearing {WardenArmors::*}:
+            cancel event
+            send action bar "&7You are &aimmumed&7 to the &8darkness&7 effect." to {_player}
+        else:
+            stop
+on click:
+    if player is sneaking:
+        if player is wearing {WardenArmors::*}:
+            if {sonicattack.%player%} is false:
+                send action bar "&7Charging up sonic attack... &23 seconds" to player
+                wait 3 seconds
+                set {sonicattack.%player%} to true
+                play sound "entity.warden.sonic_boom" to all players in radius {@radius} around the player
+                set {_l} to location above player
+                set {_v} to vector from yaw player's yaw and pitch player's pitch
+                loop 40 times:
+                    set standard length of {_v} to loop-value / 2
+                    set {_pewpew} to {_l} ~ {_v}
+                    damage all entities in radius 1.5 of {_pewpew} by 8
+                    show sonic boom at {_pewpew}
+                    if block at {_pewpew} is solid:
+                        exit loop
+                    if block at {_l} ~ {_v} is solid:
+                        exit loop
+                wait 120 seconds
+                send action bar "&7Cooldown for Sonic Attack is done." to player
+                set {sonicattack.%player%} to false
+            else:
+                send action bar "&7Cooldown is still active." to player
+
+# Warden Tool Powers
+
+    # Warden Hoe Ability
+on block break:
+    if player's tool is {WardenTools::hoe}:
+        if event-block is wheat:
+            if player has 1 of wheat seeds:
+                remove 1 seeds from the inventory of player
+                set event-block to freshly planted wheat plant
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+
+        else if event-block is carrot plant:
+            if player has 1 carrot:
+                remove 1 carrot from the inventory of player
+                set event-block to freshly planted carrot plant
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+ 
+        else if event-block is potato plant:
+            if player has 1 potato:
+                remove 1 potato from the inventory of player
+                set event-block to freshly planted potato plant
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+ 
+        else if event-block is beetroot plant:
+            if player has 1 beetroot seeds:
+                remove 1 beetroot seeds from the inventory of player
+                set event-block to freshly planted beetroot plant
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+ 
+        else if event-block is melon stem:
+            if player has 1 melon seeds:
+                remove 1 melon seeds from the inventory of player
+                set event-block to freshly planted melon stem
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+ 
+        else if event-block is pumpkin stem:
+            if player has 1 pumpkin seeds:
+                remove 1 pumpkin seeds from the inventory of player
+                set event-block to freshly planted pumpkin stem
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+ 
+        else if event-block is sugar cane:
+            if player has 1 sugar cane:
+                remove 1 sugar cane from the inventory of player
+                wait 2 tick
+                set event-block to sugar cane
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+ 
+        else if event-block is nether wart:
+            if player has 1 nether wart:
+                remove 1 nether wart from the inventory of player
+                set event-block to nether wart
+            else:
+                send "{@prefix} &cYou don't have the correct crop to replant this"
+
+
+    # Pickaxe Powers
+on mine:
+    # set {_deepslate::*} to deepslate, cobbled deepslate and deepslate ore
+    if tool of player is {WardenTools::pickaxe}:
+        if event-block is deepslate:
+            apply potion of haste 5 without particles to player for 1 second
+        if event-block is cobbled deepslate:
+            apply potion of haste 5 without particles to player for 1 second
+        if event-block is deepslate ore:
+            apply potion of haste 5 without particles to player for 1 second
+        else:
+            remove haste from player
+        chance of 0.10%:
+            feed the player by 5 beefs
+            send "{@prefix} &7The power of the warden has feed you." to player
+
+
+    # Warden Axe Ability
+on damage:
+    set {_player} to attacker
+    set {_e} to victim
+    if tool of {_player} is {WardenTools::axe}:
+        chance of 0.12%:
+            apply slowness 2 to {_e} for 120 seconds
+            send "{@prefix} &a%{_e}% &7has been slowed! You can now deal &cextra damage&7 for &2120 seconds&7!" to {_player}
+        if {_e} has potion effect slowness:
+            increase the damage by 2
+
+
+    # Warden Sword abilities
+on damage:
+    set {_player} to attacker
+    set {_e} to victim
+    if tool of {_player} is {WardenTools::sword}:
+        if health of {_player} is less than 5:
+            increase the damage by 8
+            send action bar "&7You have &clow health&7! &cDamage&7 is &aincreased&7 by 8!" to {_player}
+        if {_e} is a warden, wither, ender dragon or elder guardian:
+            increase the damage by 10
+            send action bar "&7You are attacking a boss! &cDamage&7 is &aincreased&7 by 10!" to {_player}
+        if {gloweffect.%{_e}%} is false:
+            set {gloweffect.%{_e}%} to true
+            set glowing of {_e} to true
+            send action bar "&7You have been tagged by &c%{_player}%&7! They can see you through walls!" to {_e}
+            send action bar "&c%{_e}%&7 is now being hunted by you! They are tagged." to {_player}
+            wait 120 seconds
+            set {gloweffect.%{_e}%} to false
+            set glowing of {_e} to false
+            send action bar "&7You are no longer tagged! Quickly hide!" to {_e}
+            send action bar " &c%{_e}%&7 is no longer tagged. Attack them again to tag them!" to {_player}
+
+# Warden Crafting Checks
+on craft:
+    if event-item is {WardenArmors::*}:
+        if {caughtsouls.%{_uuid}%} >= 5000:
+            remove 5000 from {caughtsouls.%{_uuid}%}
+            send "{@prefix} &dYou have &asuccessfully&d crafted a &5&nWarden Armor Set&d for &55000 souls&d." to player
+            SoulGemSet(player)
+            wait 3 ticks
+            add 1 of {SoulGem} to inventory of player
+        else:
+            cancel event
+            send "{@prefix} &7You don't have enough &5souls&7 to craft this item." to player
+            send "&7You need &55000 Souls&7 to craft this item." to player
+    if event-item is {WardenPrimedIngot}:
+        if {caughtsouls.%{_uuid}%} >= 500:
+            remove 500 from {caughtsouls.%{_uuid}%}
+            send "{@prefix} &dYou have &asuccessfully&d crafted a &f&lPrimed &5&lWarden Ingot&d for &5500 souls&d." to player
+            SoulGemSet(player)
+            wait 3 ticks
+            add 1 of {SoulGem} to inventory of player
+
+        else:
+            cancel event
+            send "{@prefix} &7You don't have enough &5souls&7 to craft this item." to player
+            send "&7You need &5500 Souls&7 to craft this item." to player
+
+
+# Warden Armor and Tool Dis/Enchant check
+
+on inventory click:
+    if player's current inventory's type is grindstone inventory:
+        loop {WardenArmors::*}:
+            set {_armor} to loop-value
+            if cursor slot of player is {_armor}:
+                if event-inventory isn't player's inventory:
+                    close inventory of player
+                    cancel event
+                    send "{@prefix} &7You can't disenchant the Warden Armor." to player
+                    stop
+        loop {WardenTools::*}:
+            set {_tools} to loop-value
+            if cursor slot of player is {_tools}:
+                if event-inventory isn't player's inventory:
+                    close inventory of player
+                    cancel event
+                    send "{@prefix} &7You can't disenchant Warden Tools." to player
+                    stop
+    else if player's current inventory's type is an anvil inventory:
+        loop {WardenArmors::*}:
+            set {_armor} to loop-value
+            if cursor slot of player is {_armor}:
+                if event-inventory isn't player's inventory:
+                    send "&r          {@prefix}"
+                    send "&7Changing the name of any Warden Item will result of the effects not working correctly!" to player
+                    stop
+        loop {WardenTools::*}:
+            set {_tools} to loop-value
+            if cursor slot of player is {_tools}:
+                if event-inventory isn't player's inventory:
+                    send "&r          {@prefix}"
+                    send "&7Changing the name of any Warden Item will result of the effects not working correctly!" to player
+                    stop
+
+# Renaming of the armors and tools Check
+
+on command "rename":
+    loop {WardenArmors::*}:
+        set {_armor} to loop-value
+        if tool of player is {_armor}:
+            cancel event 
+            send "{@prefix} &dʏᴏᴜ ᴄᴀɴᴛ ʀᴇɴᴀᴍᴇ ᴛʜɪs ɪᴛᴇᴍ"
+
+on command "essentials:iname":
+    loop {WardenArmors::*}:
+        set {_armor} to loop-value
+        if tool of player is {_armor}:
+            cancel event 
+            send "{@prefix} &dʏᴏᴜ ᴄᴀɴᴛ ʀᴇɴᴀᴍᴇ ᴛʜɪs ɪᴛᴇᴍ"
+on command "iname":
+    loop {WardenArmors::*}:
+        set {_armor} to loop-value
+        if tool of player is {_armor}:
+            cancel event 
+            send "{@prefix} &dʏᴏᴜ ᴄᴀɴᴛ ʀᴇɴᴀᴍᴇ ᴛʜɪs ɪᴛᴇᴍ"
