@@ -40,6 +40,7 @@ public class LotusSurvival extends JavaPlugin {
     public static final BiMap<Integer, Set<EntityType>> soulsPerEntity = HashBiMap.create();
     
     static {
+        soulsPerEntity.put(100, Set.of(EntityType.PLAYER));
         soulsPerEntity.put(50, Set.of(EntityType.WARDEN, EntityType.ENDER_DRAGON, EntityType.ELDER_GUARDIAN));
         soulsPerEntity.put(25, Set.of(EntityType.WITHER_SKELETON, EntityType.GHAST));
         soulsPerEntity.put(10, Set.of(EntityType.VEX));
