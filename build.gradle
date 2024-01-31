@@ -8,7 +8,7 @@ repositories {
         url = 'https://www.jitpack.io'
     }
     maven {
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        url = 'https://repo.papermc.io/repository/maven-public/'
     }
 
     maven {
@@ -26,7 +26,7 @@ processResources {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
     compileOnly 'com.github.StarDevelopmentLLC:StarCore:1.0.0-alpha.2'
     compileOnly 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.1'
     compileOnly 'com.github.StarDevelopmentLLC:StarMCLib:1.0.0-alpha.4'
