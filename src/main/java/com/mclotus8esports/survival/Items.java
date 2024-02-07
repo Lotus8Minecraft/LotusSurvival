@@ -7,6 +7,8 @@ import com.stardevllc.starmclib.item.ItemBuilder;
 import com.stardevllc.starmclib.item.enums.ArmorSlot;
 import com.stardevllc.starmclib.item.enums.ToolType;
 import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTType;
+import de.tr7zw.nbtapi.iface.ReadableNBT;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,10 +32,18 @@ public final class Items {
             return false;
         }
 
-        String tagValue = NBT.get(itemStack, nbt -> nbt.getString("staritems"));
-        if (tagValue == null || tagValue.isEmpty()) {
+        ReadableNBT tagValue = NBT.get(itemStack, nbt -> nbt.getCompound("staritems"));
+        if (tagValue == null) {
             return false;
         }
-        return tagValue.equalsIgnoreCase(value);
+
+        for (String key : tagValue.getKeys()) {
+            if (tagValue.getType(key) == NBTType.NBTTagString) {
+                return tagValue.getString(key).equalsIgnoreCase(value);
+            }
+            
+        }
+        
+        return false;
     }
 }

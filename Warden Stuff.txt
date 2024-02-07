@@ -86,15 +86,6 @@ on death:
                     SoulGemSet(attacker)
                     remove {NamedSoulGem} from attacker
                     add 1 of {SoulGem} to attacker
-# Pick up and drop events for the soul gem.
-on pick up:
-    if event-item is {NamedSoulGem}:
-        delete event-dropped item
-        cancel event
-        SoulGemSet(player)
-        wait 3 ticks
-        add 1 of {SoulGem} to inventory of player
-        stop
 
 on drop:
     if event-item is {NamedSoulGem}:
