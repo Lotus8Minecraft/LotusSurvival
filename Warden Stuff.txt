@@ -136,13 +136,6 @@ command warden [<text>]:
 
 
 # Warden Armor Powers
-    # Chestplate Abilities
-on armor change:
-    if new armor item is {WardenArmors::chestplate}:
-        apply infinite strength 3 without particles to player
-    if old armor item is {WardenArmors::chestplate}:
-        remove strength from player
-
     # Boots Ability
 on armor change:
     if new armor item is {WardenArmors::boots}:
