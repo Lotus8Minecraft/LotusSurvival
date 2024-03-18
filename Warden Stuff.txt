@@ -136,12 +136,6 @@ command warden [<text>]:
 
 
 # Warden Armor Powers
-    # Boots Ability
-on armor change:
-    if new armor item is {WardenArmors::boots}:
-        apply infinite speed 3 without particles to player
-    if old armor item is {WardenArmors::boots}:
-        remove speed from player
     # Leggings Ability
 on player move:
     if player is wearing {WardenArmors::leggings}:

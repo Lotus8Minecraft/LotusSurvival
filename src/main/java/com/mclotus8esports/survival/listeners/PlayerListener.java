@@ -29,6 +29,14 @@ public class PlayerListener implements Listener {
             if (Items.itemIdEquals(e.getNewItem(), Items.wardenChestplate.getKey().getKey())) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 2, false, false));
             }
+        } else if (e.getSlotType() == PlayerArmorChangeEvent.SlotType.FEET) {
+            if (Items.itemIdEquals(e.getOldItem(), Items.wardenBoots.getKey().getKey())) {
+                player.removePotionEffect(PotionEffectType.SPEED);
+            }
+
+            if (Items.itemIdEquals(e.getNewItem(), Items.wardenBoots.getKey().getKey())) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
+            }
         }
     }
 }
