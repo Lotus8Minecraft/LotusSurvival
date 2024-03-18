@@ -69,29 +69,6 @@ command wardenrecipe [<text>] [<player>]:
             send "&7&oPlease make a selection" to player
             send "&7Do &5/wardenrecipe <clear/unlock> <player>" to player
 
-                
-# Death Events
-
-on death:
-    set {_victim} to victim
-    if attacker is a player:
-        if attacker has {NamedSoulGem}:
-            if victim is a player:
-                if:
-                    victim has {NamedSoulGem}
-                    attacker has {NamedSoulGem}
-                then:
-                    add {caughtsouls.%uuid of victim%} to {caughtsouls.%uuid of attacker%}
-                    set {caughtsouls.%uuid of victim%} to 0
-                    SoulGemSet(attacker)
-                    remove {NamedSoulGem} from attacker
-                    add 1 of {SoulGem} to attacker
-
-on drop:
-    if event-item is {NamedSoulGem}:
-        cancel event
-        stop
-
 # Main Commands for the souls gems
 command addsoulgem [<number>] [<player>]:
     permission: soulgem.add

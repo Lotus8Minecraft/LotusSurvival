@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.mclotus8esports.survival.items.SoulGem;
 import com.mclotus8esports.survival.listeners.BlockListener;
 import com.mclotus8esports.survival.listeners.EntityListener;
+import com.mclotus8esports.survival.listeners.PlayerListener;
 import com.stardevllc.staritems.CustomItem;
 import com.stardevllc.staritems.CustomItemsManager;
 import com.stardevllc.staritems.ItemKey;
@@ -64,6 +65,7 @@ public class LotusSurvival extends JavaPlugin {
         
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
     }
     
     public static int getSoulsForEntityType(EntityType entityType) {
