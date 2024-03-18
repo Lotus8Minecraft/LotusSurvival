@@ -14,8 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.Random;
@@ -98,6 +100,32 @@ public class EntityListener implements Listener {
                 return;
             }
         }
+    }
+    
+    @EventHandler
+    public void onPotionEffect(EntityPotionEffectEvent e) {
+        if (!(e.getEntity() instanceof Player player)) {
+            return;
+        }
+        
+        if (e.getAction() == EntityPotionEffectEvent.Action.ADDED) {
+            if (e.getNewEffect() == null) {
+                return;
+            }
+            
+            if (e.getNewEffect().getType().equals(PotionEffectType.DARKNESS)) {
+                ItemStack helmet = player.getInventory().getHelmet();
+                if (helmet == null) {
+                    return;
+                }
+                
+                if (Items.itemIdEquals(helmet, Items.wardenHelmet.getKey().getKey())) {
+                    e.setCancelled(true);
+                }
+            }
+        }
+        
+        //TODO May need to handle the change action for darkness as well.
     }
 
     @EventHandler

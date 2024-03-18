@@ -6,6 +6,7 @@ import com.mclotus8esports.survival.items.SoulGem;
 import com.mclotus8esports.survival.listeners.BlockListener;
 import com.mclotus8esports.survival.listeners.EntityListener;
 import com.mclotus8esports.survival.listeners.PlayerListener;
+import com.mclotus8esports.survival.task.HelmetCheckerThread;
 import com.stardevllc.staritems.CustomItem;
 import com.stardevllc.staritems.CustomItemsManager;
 import com.stardevllc.staritems.ItemKey;
@@ -51,6 +52,7 @@ public class LotusSurvival extends JavaPlugin {
     public void onEnable() {
         customItemsManager = getServer().getServicesManager().getRegistration(CustomItemsManager.class).getProvider();
         
+        //Items class registration
         for (Field field : Items.class.getDeclaredFields()) {
             if (CustomItem.class.isAssignableFrom(field.getType())) {
                 try {
@@ -61,11 +63,16 @@ public class LotusSurvival extends JavaPlugin {
             }
         }
         
+        //Full class custom items registration
         customItemsManager.addCustomItemClass(new ItemKey("lotussurvival", "soul_gem"), SoulGem.class);
         
+        //Listener Registration
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        
+        //Thread Registration
+        new HelmetCheckerThread(this).start();
     }
     
     public static int getSoulsForEntityType(EntityType entityType) {

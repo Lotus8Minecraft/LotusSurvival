@@ -136,19 +136,6 @@ command warden [<text>]:
 
 
 # Warden Armor Powers
-
-    # Helmet Ability
-every 5 seconds:
-    loop all players:
-        if loop-player has potion effect darkness:
-            remove darkness from the loop-player
-        if loop-player is wearing {WardenArmors::helmet}:
-            if light level at the loop-player is less than 5:
-                apply infinite night vision 1 without particles to loop-player
-            else:
-                remove night vision from the loop-player
-        else:
-            stop
     # Chestplate Abilities
 on armor change:
     if new armor item is {WardenArmors::chestplate}:
